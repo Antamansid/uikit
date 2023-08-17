@@ -11,7 +11,7 @@ import type {
     InputControlSize,
     InputControlView,
 } from '../types';
-import {getInputControlState, prepareAutoComplete} from '../utils';
+import {getControlErrorTextId, getInputControlState, prepareAutoComplete} from '../utils';
 
 import {AdditionalContent} from './AdditionalContent';
 import {TextInputControl} from './TextInputControl';
@@ -211,7 +211,11 @@ export const TextInput = React.forwardRef<HTMLSpanElement, TextInputProps>(funct
             </span>
             {(isErrorMsgVisible || note) && (
                 <div className={b('outer-additional-content')}>
-                    {isErrorMsgVisible && <div className={b('error')}>{error}</div>}
+                    {isErrorMsgVisible && (
+                        <div className={b('error')} id={getControlErrorTextId(id)}>
+                            {error}
+                        </div>
+                    )}
                     {note && <div className={b('note')}>{note}</div>}
                 </div>
             )}
