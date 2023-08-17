@@ -11,7 +11,12 @@ import type {
     InputControlSize,
     InputControlView,
 } from '../types';
-import {getControlErrorTextId, getInputControlState, prepareAutoComplete} from '../utils';
+import {
+    getControlErrorTextId,
+    getControlNoteId,
+    getInputControlState,
+    prepareAutoComplete,
+} from '../utils';
 
 import {AdditionalContent} from './AdditionalContent';
 import {TextInputControl} from './TextInputControl';
@@ -216,7 +221,11 @@ export const TextInput = React.forwardRef<HTMLSpanElement, TextInputProps>(funct
                             {error}
                         </div>
                     )}
-                    {note && <div className={b('note')}>{note}</div>}
+                    {note && (
+                        <div className={b('note')} id={getControlNoteId(id)}>
+                            {note}
+                        </div>
+                    )}
                 </div>
             )}
         </span>

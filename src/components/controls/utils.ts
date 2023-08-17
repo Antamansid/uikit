@@ -16,6 +16,8 @@ export const getInputControlState = (
     return args.error ? 'error' : undefined;
 };
 
-export const getControlErrorTextId = (controlId?: string) => {
-    return controlId ? `${controlId}-error-text` : undefined;
-};
+export const getControlErrorTextId = (controlId?: string) =>
+    controlId ? `${controlId}-error-text` : undefined;
+
+export const getControlNoteId = (controlId?: string) =>
+    controlId ? `${controlId}-note-text` : undefined;
