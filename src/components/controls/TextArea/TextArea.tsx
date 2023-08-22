@@ -102,6 +102,7 @@ export const TextArea = React.forwardRef<HTMLSpanElement, TextAreaProps>(functio
         controlProps: {
             ...controlProps,
             'aria-describedby': ariaDescribedBy,
+            'aria-invalid': controlProps?.['aria-invalid'] ?? Boolean(error),
         },
     };
 
