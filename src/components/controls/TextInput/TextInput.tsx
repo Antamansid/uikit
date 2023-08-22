@@ -12,7 +12,12 @@ import type {
     InputControlSize,
     InputControlView,
 } from '../types';
-import {getInputControlState, prepareAutoComplete} from '../utils';
+import {
+    getControlErrorTextId,
+    getControlNoteId,
+    getInputControlState,
+    prepareAutoComplete,
+} from '../utils';
 
 import {AdditionalContent} from './AdditionalContent';
 import {TextInputControl} from './TextInputControl';
@@ -91,12 +96,31 @@ export const TextInput = React.forwardRef<HTMLSpanElement, TextInputProps>(funct
     const labelSize = useElementSize(isLabelVisible ? labelRef : null, size);
     const leftContentSize = useElementSize(isLeftContentVisible ? leftContentRef : null, size);
 
+    const describedBy = React.useMemo(() => {
+        const result = [];
+        if (originalControlProps?.['aria-describedby']) {
+            result.push(originalControlProps['aria-describedby']);
+        }
+        if (id) {
+            if (note) {
+                result.push(getControlNoteId(id));
+            }
+
+            if (error) {
+                result.push(getControlErrorTextId(id));
+            }
+        }
+        return result.join(' ');
+    }, [originalControlProps, id, note, error]);
+
     const controlProps: TextInputProps['controlProps'] = {
         ...originalControlProps,
         style: {
             ...originalControlProps?.style,
             ...(isLabelVisible && labelSize.width ? {paddingLeft: `${labelSize.width}px`} : {}),
         },
+        'aria-invalid': originalControlProps?.['aria-invalid'] ?? Boolean(error),
+        'aria-describedby': describedBy,
     };
     const commonProps = {
         id,
