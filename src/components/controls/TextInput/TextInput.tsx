@@ -5,18 +5,14 @@ import {useElementSize} from '../../utils/useElementSize';
 import {useForkRef} from '../../utils/useForkRef';
 import {useUniqId} from '../../utils/useUniqId';
 import {ClearButton, mapTextInputSizeToButtonSize} from '../common';
+import {OuterAdditionalContent} from '../common/OuterAdditionalContent/OuterAdditionalContent';
 import type {
     BaseInputControlProps,
     InputControlPin,
     InputControlSize,
     InputControlView,
 } from '../types';
-import {
-    getControlErrorTextId,
-    getControlNoteId,
-    getInputControlState,
-    prepareAutoComplete,
-} from '../utils';
+import {getInputControlState, prepareAutoComplete} from '../utils';
 
 import {AdditionalContent} from './AdditionalContent';
 import {TextInputControl} from './TextInputControl';
@@ -214,20 +210,12 @@ export const TextInput = React.forwardRef<HTMLSpanElement, TextInputProps>(funct
                     </AdditionalContent>
                 )}
             </span>
-            {(isErrorMsgVisible || note) && (
-                <div className={b('outer-additional-content')}>
-                    {isErrorMsgVisible && (
-                        <div className={b('error')} id={getControlErrorTextId(id)}>
-                            {error}
-                        </div>
-                    )}
-                    {note && (
-                        <div className={b('note')} id={getControlNoteId(id)}>
-                            {note}
-                        </div>
-                    )}
-                </div>
-            )}
+            <OuterAdditionalContent
+                note={note}
+                error={error}
+                isVisible={isErrorMsgVisible}
+                controlId={id}
+            />
         </span>
     );
 });

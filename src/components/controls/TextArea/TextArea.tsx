@@ -4,6 +4,7 @@ import {blockNew} from '../../utils/cn';
 import {useForkRef} from '../../utils/useForkRef';
 import {useUniqId} from '../../utils/useUniqId';
 import {ClearButton, mapTextInputSizeToButtonSize} from '../common';
+import {OuterAdditionalContent} from '../common/OuterAdditionalContent/OuterAdditionalContent';
 import type {
     BaseInputControlProps,
     InputControlPin,
@@ -159,12 +160,12 @@ export const TextArea = React.forwardRef<HTMLSpanElement, TextAreaProps>(functio
                     />
                 )}
             </span>
-            {(isErrorMsgVisible || note) && (
-                <div className={b('outer-additional-content')}>
-                    {isErrorMsgVisible && <div className={b('error')}>{error}</div>}
-                    {note && <div className={b('note')}>{note}</div>}
-                </div>
-            )}
+            <OuterAdditionalContent
+                note={note}
+                error={error}
+                isVisible={isErrorMsgVisible}
+                controlId={id}
+            />
         </span>
     );
 });
