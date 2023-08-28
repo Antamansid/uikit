@@ -6,7 +6,6 @@ import {useForkRef} from '../../utils/useForkRef';
 import {useUniqId} from '../../utils/useUniqId';
 import {ClearButton, mapTextInputSizeToButtonSize} from '../common';
 import {OuterAdditionalContent} from '../common/OuterAdditionalContent/OuterAdditionalContent';
-import {useDescribedBy} from '../common/useDescribedBy';
 import type {
     BaseInputControlProps,
     InputControlPin,
@@ -92,12 +91,15 @@ export const TextInput = React.forwardRef<HTMLSpanElement, TextInputProps>(funct
     const labelSize = useElementSize(isLabelVisible ? labelRef : null, size);
     const leftContentSize = useElementSize(isLeftContentVisible ? leftContentRef : null, size);
 
-    const ariaDescribedBy = useDescribedBy({
-        ariaDescribedBy: originalControlProps?.['aria-describedby'],
-        note,
-        error,
-        controlId: id,
-    });
+    const errorMessageId = useUniqId();
+    const noteId = useUniqId();
+    const ariaDescribedBy = [
+        originalControlProps?.['aria-describedby'],
+        note ? noteId : undefined,
+        isErrorMsgVisible ? errorMessageId : undefined,
+    ]
+        .filter(Boolean)
+        .join(' ');
 
     const controlProps: TextInputProps['controlProps'] = {
         ...originalControlProps,
@@ -105,7 +107,7 @@ export const TextInput = React.forwardRef<HTMLSpanElement, TextInputProps>(funct
             ...originalControlProps?.style,
             ...(isLabelVisible && labelSize.width ? {paddingLeft: `${labelSize.width}px`} : {}),
         },
-        'aria-invalid': originalControlProps?.['aria-invalid'] ?? Boolean(error),
+        'aria-invalid': Boolean(error) || undefined,
         'aria-describedby': ariaDescribedBy,
     };
     const commonProps = {
@@ -222,9 +224,9 @@ export const TextInput = React.forwardRef<HTMLSpanElement, TextInputProps>(funct
             </span>
             <OuterAdditionalContent
                 note={note}
-                error={error}
-                isVisible={isErrorMsgVisible}
-                controlId={id}
+                errorMessage={isErrorMsgVisible ? error : undefined}
+                errorMessageId={errorMessageId}
+                noteId={noteId}
             />
         </span>
     );
